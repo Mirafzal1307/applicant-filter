@@ -17,8 +17,8 @@
           class="w-full"
           placeholder="Abdulla"
           :options="options"
-          data-maska="A A"
-          data-maska-tokens="A:[A-Z']:multiple "
+          data-maska="AA"
+          data-maska-tokens="A:[A-Z']:multiple"
         />
         <CInput
           v-model="employeeInfo.lastname"
@@ -27,8 +27,8 @@
           class="w-full"
           placeholder="Abdullayev"
           :options="options"
-          data-maska="A A"
-          data-maska-tokens="A:[A-Z']:multiple "
+          data-maska="AA"
+          data-maska-tokens="A:[A-Z']:multiple"
         />
       </div>
       <div class="flex justify-between gap-8 my-3">
@@ -40,8 +40,7 @@
           placeholder="Abdulla o'g'li"
           :options="options"
           data-maska="A A"
-          data-maska-tokens="A:[A-Z']:multiple "
-
+          data-maska-tokens="A:[A-Z']:multiple"
         />
         <CInput
           v-model="employeeInfo.birth_date"
@@ -61,7 +60,7 @@
           placeholder="AA"
           :options="options"
           data-maska="AA"
-          data-maska-tokens="A:[A-Z]:multiple 0:[0-9]:optional "
+          data-maska-tokens="A:[A-Z]:multiple 0:[0-2]:optional "
         />
         <CInput
           v-model="employeeInfo.passport_number"
@@ -82,6 +81,11 @@
 <script setup lang="ts">
 import CButton from '@/components/button/CButton.vue'
 import CInput from '@/components/form/input/CInput.vue'
+import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const { createApplicant} = useUserStore()
 
 const employeeInfo = {
   pnfl: '',
@@ -113,5 +117,17 @@ async function addEmployee() {
     birth_date: employeeInfo.birth_date.trim()
   }
   console.log(employeeInfos)
+
+  try {
+   const data:unknown = await createApplicant(employeeInfo)
+   console.log(data);
+   if(data?.status === 200){
+     router.push('/employee-list')
+
+   }
+   
+  } catch (error) {
+    error
+  }
 }
 </script>

@@ -1,7 +1,7 @@
-import { type User, type userCredentials } from './../shared/types/userTypes';
+import { type User, type userCredentials, type applicantInfo } from './../shared/types/userTypes';
 import { reactive, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { login } from '@/services/user.service';
+import { login , employeePost } from '@/services/user.service';
 
 export const useUserStore = defineStore('user', () => {
 	// state
@@ -13,7 +13,6 @@ export const useUserStore = defineStore('user', () => {
 	const userLogin = async (userCredentials: userCredentials) => {
 		try {
 			loading.value = true
-			// any ni orniga user uchun berilgan typeni berib ket !
 			const { data } = await login(userCredentials)
 
 
@@ -26,5 +25,18 @@ export const useUserStore = defineStore('user', () => {
 			loading.value = false
 		}
 	}
-	return { isLoggingOut, user, userLogin }
+
+	const createApplicant = async (applicantInfo: applicantInfo) => {
+		try {
+			loading.value = true
+			const data = await employeePost(applicantInfo)
+			return data
+		} catch (error) {
+			return error
+		} finally {
+			loading.value = false
+		}
+	}
+
+	return { isLoggingOut, user, userLogin ,createApplicant }
 })

@@ -1,5 +1,5 @@
 import axios from "@/shared/plugins/axios";
-import type { userCredentials } from "@/shared/types/userTypes";
+import type { applicantInfo, userCredentials } from "@/shared/types/userTypes";
 
 
 //  User services 
@@ -8,4 +8,9 @@ export const login = async (userCredentials: userCredentials) => {
 
     return data
 
+}
+export const employeePost = async (applicantInfo: applicantInfo) => {
+  const data = await axios.post('employee/v1/create-employee' , applicantInfo )
+
+  return data
 }
