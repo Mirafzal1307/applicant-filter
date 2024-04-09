@@ -1,7 +1,9 @@
 <template>
   <div class="container mt-4">
+   <CNavigator title="Back" />
     <form action="" @submit.prevent="addEmployee" class="w-[70%] mx-auto">
       <h1 class="font-bold text-3xl py-8">Ishga qabul qulinuvchining ma'lumotlarini olish</h1>
+      
       <CInput
         v-model="employeeInfo.pnfl"
         type="text"
@@ -83,9 +85,12 @@ import CButton from '@/components/button/CButton.vue'
 import CInput from '@/components/form/input/CInput.vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
+import { toast, type ToastOptions } from 'vue3-toastify'
+import CNavigator from '@/components/navigator/CNavigator.vue'
+// import { Icon } from '@iconify/vue'
 
 const router = useRouter()
-const { createApplicant} = useUserStore()
+const { createApplicant } = useUserStore()
 
 const employeeInfo = {
   pnfl: '',
@@ -119,15 +124,24 @@ async function addEmployee() {
   console.log(employeeInfos)
 
   try {
-   const data:unknown = await createApplicant(employeeInfo)
-   console.log(data);
-   if(data?.status === 200){
-     router.push('/employee-list')
-
-   }
-   
+    const data: unknown = await createApplicant(employeeInfo)
+    console.log(data)
+    if (data?.status === 200) {
+      router.push('/employee-list')
+      toast.success('Successfully added', {
+        autoClose: 3000,
+        position: toast.POSITION.TOP_RIGHT
+      } as ToastOptions)
+    }
   } catch (error) {
-    error
+    if (error) {
+      toast.error('Error has occured', {
+        autoClose: 3000,
+        position: toast.POSITION.TOP_RIGHT
+      } as ToastOptions)
+    }
   }
 }
+
+
 </script>

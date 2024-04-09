@@ -1,13 +1,14 @@
 import { type User, type userCredentials, type applicantInfo } from './../shared/types/userTypes';
 import { reactive, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { login , employeePost } from '@/services/user.service';
+import { login, employeePost, getEmployeeList } from '@/services/user.service';
 
 export const useUserStore = defineStore('user', () => {
 	// state
 	const isLoggingOut = ref(false)
 	const loading = ref(false)
 	let user = reactive({}) as User
+	let applicantList = reactive([]) as Array<[]>
 
 	// actions
 	const userLogin = async (userCredentials: userCredentials) => {
@@ -38,5 +39,21 @@ export const useUserStore = defineStore('user', () => {
 		}
 	}
 
-	return { isLoggingOut, user, userLogin ,createApplicant }
+	const getApplicantList = async () => {
+		try {
+			loading.value = true
+			const { data } = await getEmployeeList()
+
+			 console.log( data);
+			 
+			applicantList = data
+			return data
+		} catch (err) {
+			return err
+		} finally {
+			loading.value = false
+		}
+	}
+
+	return { isLoggingOut, user, applicantList, userLogin, createApplicant, getApplicantList }
 })
