@@ -19,46 +19,41 @@
           </h2>
         </template>
         <template #lastname="{ data }">
-          <pre class="text-black whitespace-no-wrap">
+          <pre class="truncate text-black text-base font-semibold whitespace-no-wrap capitalize">
             {{ data.lastname }}
           
           </pre>
         </template>
         <template #middlename="{ data }">
           <p class="text-black text-base font-semibold whitespace-no-wrap">
-            {{ data.middlename }} <span class="text-[#B2B7C1]">UZS</span>
-          </p>
-        </template>
-        <template #passport_number="{ data }">
-          <p class="text-black text-base font-semibold whitespace-no-wrap">
-            {{ data.passport_number }} <span class="text-[#B2B7C1]">UZS</span>
+            {{ data.middlename }} <span class="text-[#B2B7C1]"></span>
           </p>
         </template>
 
         <template #passport_seria="{ data }">
           <p class="text-black text-base font-semibold whitespace-no-wrap">
-            {{ data.passport_seria }} <span class="text-[#B2B7C1]">UZS</span>
+            {{ data.passport_seria }} <span class="text-[#B2B7C1]"></span>
           </p>
         </template>
+        <template #passport_number="{ data }">
+          <p class="text-black text-base font-semibold whitespace-no-wrap">
+            {{ data.passport_number }} <span class="text-[#B2B7C1]"></span>
+          </p>
+        </template>
+
         <template #pnfl="{ data }">
           <p class="text-black text-base font-semibold whitespace-no-wrap">
-            {{ data.pnfl }} <span class="text-[#B2B7C1]">UZS</span>
+            {{ data.pnfl }} <span class="text-[#B2B7C1]"></span>
           </p>
         </template>
         <template #birth_date="{ data }">
           <p class="text-black text-base font-semibold whitespace-no-wrap">
-            {{ data.birth_date }} <span class="text-[#B2B7C1]">UZS</span>
+            {{ data.birth_date }} <span class="text-[#B2B7C1]"></span>
           </p>
         </template>
-       
-
-        <template #get_status_display="{ data }">
-          <p class="text-black whitespace-no-wrap">{{ data.get_status_display }}</p>
-        </template>
-
         <template #actions="{ data }">
           <div class="text-center">
-            <RouterLink :to="{ name: 'sponsor-view', query: { id: data?.id } }">
+            <RouterLink :to="{ name: 'employee-view', query: { id: data?.id } }">
               <CButton
                 bg-color="bg-transparent"
                 text-color="text-primary"
@@ -80,32 +75,24 @@ import CButton from '@/components/button/CButton.vue'
 import CTable from '@/components/table/CTable.vue'
 import { onMounted, reactive } from 'vue'
 import { useUserStore } from '@/stores/user'
-import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { Icon } from '@iconify/vue/dist/iconify.js'
 
 const userStore = useUserStore()
 
-const { applicantList } = userStore
-
-console.log(applicantList)
+const { applicantList } = storeToRefs(userStore)
 
 const { getApplicantList } = useUserStore()
 
-const getApplicantsList = async () => {
-  const data = getApplicantList()
-  console.log(data)
-
-  return data
-}
-
-const updatePage = () => {
-  getApplicantsList()
-}
-
 onMounted(() => {
-  getApplicantsList()
+  getApplicantList(1)
 })
 
-const titles = reactive([
+const updatePage = (page: number) => {
+  getApplicantList(page)
+}
+
+const titles: any = reactive([
   {
     title: 'Ism',
     keys: 'firstname'
@@ -119,24 +106,21 @@ const titles = reactive([
     keys: 'middlename'
   },
   {
-    title: 'Passport raqami',
-    keys: 'passport_number'
-  },
-  {
     title: 'Passport seriya',
     keys: 'passport_seria'
   },
+  {
+    title: 'Passport raqami',
+    keys: 'passport_number'
+  },
+
   {
     title: 'PNFL',
     keys: 'pnfl'
   },
   {
-    title: 'Tug\'ilgan sana',
+    title: "Tug'ilgan sana",
     keys: 'birth_date'
-  },
-  {
-    title: 'Holati',
-    keys: 'get_status_display'
   },
   {
     title: 'Amallar',

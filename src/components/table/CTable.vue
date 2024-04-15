@@ -31,23 +31,14 @@
 </template>
 
 <script setup lang="ts">
-import CPagination from '../pagination/CPagination.vue'
+import CPagination from '@/components/pagination/CPagination.vue'
 
-const props = defineProps({
-  titles: {
-    type: Array,
-    default: () => []
-  },
-  data: {
-    type: Array,
-    default: () => []
-  },
-  totalItems: {
-    type: Number,
-    default: 0,
-    required: true
-  }
-})
+const props = defineProps<{
+  titles?: [],
+  data?: [],
+  totalItems: number
+}>()
+
 
 console.log(props.data)
 
@@ -56,4 +47,11 @@ const emit = defineEmits(['updatePage'])
 function updatePage(page: number) {
   emit('updatePage', page)
 }
+/*
+
+const obj = {} Record<string, unknown>
+
+
+*/
 </script>
+

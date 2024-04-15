@@ -13,7 +13,7 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      
+
       component: () => import('@/pages/login/Login.vue')
     },
     {
@@ -27,6 +27,12 @@ const router = createRouter({
       name: 'add-employee',
       meta: { layout: 'default' },
       component: () => import('@/pages/add-employee/AddEmployee.vue')
+    },
+    {
+      path: '/employee-view',
+      name: 'employee-view',
+      meta: { layout: 'default' },
+      component: () => import('@/pages/employee-view/EmployeeView.vue')
     }
   ]
 })

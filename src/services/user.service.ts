@@ -15,9 +15,15 @@ export const employeePost = async (applicantInfo: applicantInfo) => {
   return data
 }
 
-export const getEmployeeList = async () => {
-  const data = await axios.get('employee/v1/get-all-employees')
+export const getEmployeeList = async (page: number) => {
+  const data = await axios.get(`employee/v1/get-all-employees?page=${page}&size=10`)
   console.log(data);
-  
+
   return data
 }
+
+export const getEmployeeInfoById = async (url: string) => {
+  const data = await axios.post(url)
+  console.log(data);
+  return data
+} 
