@@ -1,8 +1,9 @@
 <template>
   <div class="container my-5">
-    <div class="">
-      <div class="pt-2">
-        <ul class="flex">
+    <CNavigator title="Back to home" />
+    <div class="flex py-6 gap-8 ">
+      <div class="w-[40%]">
+        <ul class="flex flex-col">
           <li class="w-full" v-for="item in pages" :key="item.id">
             <button
               :class="[
@@ -20,7 +21,35 @@
           </li>
         </ul>
       </div>
-      <div>{{ applicantInfo }}</div>
+      <div class="w-full">
+        <div
+          v-if="applicantInfo && applicantInfo[0]?.api_name === 'date_document_info'"
+          class="w-full"
+        >
+          <DateDocument :data="applicantInfo" />
+        </div>
+        <div
+          class="w-full"
+          v-if="
+            applicantInfo &&
+            (applicantInfo?.api_name === 'birth_info' ||
+              applicantInfo[0]?.api_name === 'birth_info')
+          "
+        >
+          <BirthInfo :data="applicantInfo" />
+        </div>
+        <div
+          class="w-full"
+          v-if="
+            applicantInfo &&
+            (applicantInfo?.api_name === 'death_info' ||
+              applicantInfo[0]?.api_name === 'death_info')
+          "
+        >
+          <DeathInfo :data="applicantInfo" />
+        </div>
+        <div></div>
+      </div>
     </div>
   </div>
 </template>
@@ -30,9 +59,10 @@ import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
-
-
-
+import DateDocument from '@/pages/date-info/DateDocument.vue'
+import BirthInfo from '@/pages/birth-info/BirthInfo.vue'
+import DeathInfo from '@/pages/death-info/DeathInfo.vue'
+import CNavigator from '@/components/navigator/CNavigator.vue'
 const userStore = useUserStore()
 
 const { applicantInfo } = storeToRefs(userStore)
@@ -44,14 +74,14 @@ const employeeId = router.currentRoute.value.query.id
 
 onMounted(() => {
   getApplicantInfoById(`${employeeId}`)
-  getEmployeeInfo(1)
+  getEmployeeInfo()
 })
 
 const pages = reactive([
   {
     id: 1,
     name: 'Date Document',
-    path: 'datedoc/v1/get-datedoc-by-api?id=',
+    path: 'datedoc/v1/get-datedoc-by-emp-id?id=',
     border: 'rounded-l',
     body: ''
   },
@@ -129,7 +159,7 @@ const pages = reactive([
 
 const tab = ref(1)
 
-const getEmployeeInfo = (tabNum: number) => {
+const getEmployeeInfo = (tabNum = 1) => {
   const tabName = pages.find((data) => data.id === tabNum)
   const url = `${tabName?.path}` + employeeId
 
