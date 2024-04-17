@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-   <CNavigator title="Back" />
+   <CNavigator title="Bosh sahifa" />
     <form action="" @submit.prevent="addEmployee" class="w-[70%] mx-auto">
       <h1 class="font-bold text-3xl py-8">Ishga qabul qulinuvchining ma'lumotlarini olish</h1>
       

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col text-start gap-y-2">
+  <div class="flex flex-col text-start ">
     <label class="text-xs font-bold text-black uppercase" :for="id">{{ label }}</label>
     <input
       class="text-black rounded-md px-4 py-3 w-full bg-[#E0E7FF33] border-[#E0E7FF] placeholder:text-[#79849c] border-solid border focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"

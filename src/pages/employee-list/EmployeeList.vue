@@ -1,8 +1,12 @@
 <template>
   <div class="container mt-10">
-    <div class="flex justify-end">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center justify-between gap-4" >
+        <CInput placeholder="search" type="text" class="h-auto" />
+         <CButton> Qidirish</CButton>
+      </div>
       <RouterLink to="/add-employee">
-        <CButton class=""> Employee yaratish</CButton>
+        <CButton class="h-full"> Nomzod qo'shish</CButton>
       </RouterLink>
     </div>
 
@@ -77,6 +81,7 @@ import { onMounted, reactive } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 import { Icon } from '@iconify/vue/dist/iconify.js'
+import CInput from '@/components/form/input/CInput.vue'
 
 const userStore = useUserStore()
 

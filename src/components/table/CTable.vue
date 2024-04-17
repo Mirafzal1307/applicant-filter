@@ -8,15 +8,15 @@
               <th
                 v-for="(title, index) in props.titles"
                 :key="index"
-                class="px-5 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
+                class="px-5 py-3 text-left text-lg border font-semibold text-black-400 uppercase tracking-wider"
               >
                 {{ title.title }}
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in data" :key="index" class="gap-y-2 bg-white my-2 gap-3">
-              <td class="px-5 py-5" v-for="(header, headerId) in titles" :key="headerId">
+            <tr v-for="(item, index) in data" :key="index" class=" bg-white  border">
+              <td class="px-5 py-1 border" v-for="(header, headerId) in titles" :key="headerId">
                 <slot :data="item" :name="header.keys">
                   {{ item[header.keys] }}
                 </slot>

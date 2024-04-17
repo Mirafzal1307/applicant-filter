@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <div v-if="props.data.result" class="w-full bg-gray-100 mx-auto  rounded-lg p-10">
+    <div v-if="props.data.result" class="w-full bg-gray-100 mx-auto text-xl rounded-lg p-10">
       {{ props?.data.result }}
     </div>
     <div v-else class="w-full bg-gray-100 mx-auto  rounded-lg p-10">
@@ -26,7 +26,7 @@
         </div>
         <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
           <h2 class="font-semibold text-2xl text-gray-600 uppercase">Tug'ilgan sana:</h2>
-          <h2 class="font-thin text-2xl">{{ props?.data[0]?.birth_date }}</h2>
+          <h2 class="font-thin text-2xl">{{ formatDate(props?.data[0]?.birth_date) }}</h2>
         </div>
         <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
           <h2 class="font-semibold text-2xl text-gray-600 uppercase">Jinsi:</h2>
@@ -44,7 +44,7 @@
         </div>
         <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
           <h2 class="font-semibold text-2xl text-gray-600 uppercase">Berilgan sana:</h2>
-          <h2 class="font-thin text-2xl">{{ props?.data[0]?.doc_date }}</h2>
+          <h2 class="font-thin text-2xl">{{ formatDate(props?.data[0]?.doc_date) }}</h2>
         </div>
         <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
           <h2 class="font-semibold text-2xl text-gray-600 uppercase">Hujjat raqami:</h2>
@@ -96,6 +96,8 @@
 </template>
 
 <script setup lang="ts">
+import { formatDate } from '@/shared/utils/utils';
+
 const props = defineProps({
   data: {
     type: Object,

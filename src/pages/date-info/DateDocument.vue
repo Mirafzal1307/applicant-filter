@@ -32,11 +32,11 @@
         </div>
         <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
           <h2 class="font-semibold text-2xl text-gray-600 uppercase">Berilgan sana:</h2>
-          <h2 class="font-thin text-2xl">{{ props.data[0].date_issue }}</h2>
+          <h2 class="font-thin text-2xl">{{ formatDate(props.data[0].date_issue) }}</h2>
         </div>
         <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
           <h2 class="font-semibold text-2xl text-gray-600 uppercase">Amal qilish muddati:</h2>
-          <h2 class="font-thin text-2xl">{{ props.data[0].date_expiry }}</h2>
+          <h2 class="font-thin text-2xl">{{ formatDate(props.data[0].date_expiry) }}</h2>
         </div>
         <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
           <h2 class="font-semibold text-2xl text-gray-600 uppercase">Kim tomonidan berilgan:</h2>
@@ -60,6 +60,8 @@
 </template>
 
 <script setup lang="ts">
+import { formatDate } from '@/shared/utils/utils';
+
 const props = defineProps({
   data: {
     type: Object,
