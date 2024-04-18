@@ -1,7 +1,7 @@
 import type { User, userCredentials, applicantInfo } from '@/shared/types/userTypes';
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { login, employeePost, getEmployeeList, getEmployeeInfoById } from '@/services/user.service';
+import { login, employeePost, getEmployeeList, getEmployeeInfoById, putApplicantInfo, getConvictionInfo } from '@/services/user.service';
 
 export const useUserStore = defineStore('user', () => {
 	// state
@@ -10,6 +10,7 @@ export const useUserStore = defineStore('user', () => {
 	const user = ref({} as User)
 	const applicantList = ref([])
 	const applicantInfo = ref()
+	const convictionInfo = ref([])
 	// actions
 	const userLogin = async (userCredentials: userCredentials) => {
 		try {
@@ -41,11 +42,13 @@ export const useUserStore = defineStore('user', () => {
 		}
 	}
 
-	const getApplicantList = async (page: number) => {
+	const getApplicantList = async (page: number, params: string) => {
+		console.log(page);
+
 		try {
 			loading.value = true
 
-			const { data } = await getEmployeeList(page)
+			const { data } = await getEmployeeList(page, params)
 
 			applicantList.value = data.items
 
@@ -70,14 +73,48 @@ export const useUserStore = defineStore('user', () => {
 		}
 	}
 
+	const updateApplicantInfo = async (url: string) => {
+		try {
+			loading.value = true
+			const { data } = await putApplicantInfo(url)
+			console.log(data);
+
+			applicantInfo.value = data
+
+		} catch (err) {
+			return err
+		} finally {
+			loading.value = false
+		}
+	}
+
+	const getConInfo = async (id: string, queryId: number) => {
+		try {
+			loading.value = true
+			const { data } = await getConvictionInfo(id, queryId)
+			console.log(data);
+
+			convictionInfo.value = data
+
+		} catch (err) {
+			return err
+		} finally {
+			loading.value = false
+		}
+	}
+
 	return {
 		isLoggingOut,
 		user,
 		applicantList,
 		applicantInfo,
+		loading,
+		convictionInfo,
 		userLogin,
 		createApplicant,
 		getApplicantList,
-		getApplicantInfoById
+		getApplicantInfoById,
+		updateApplicantInfo,
+		getConInfo
 	}
 })

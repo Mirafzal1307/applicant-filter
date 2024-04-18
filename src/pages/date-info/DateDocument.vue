@@ -1,6 +1,9 @@
 <template>
-  <div class=" ">
-    <div class="w-full bg-gray-100 mx-auto  rounded-lg p-10">
+  <div v-if="loading" class="mt-5">
+    <CSkeleton />
+  </div>
+  <div v-else class=" ">
+    <div class="w-full bg-gray-100 mx-auto rounded-lg p-10">
       <h1 class="font-bold text-3xl my-3 text-gray-600">Ishchining ma'lumotlari</h1>
       <div class="w-full">
         <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
@@ -60,7 +63,8 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate } from '@/shared/utils/utils';
+import CSkeleton from '@/components/skeleton/CSkeleton.vue'
+import { formatDate } from '@/shared/utils/utils'
 
 const props = defineProps({
   data: {
@@ -68,6 +72,10 @@ const props = defineProps({
     default() {
       return {}
     }
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 </script>

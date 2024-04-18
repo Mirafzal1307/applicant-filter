@@ -62,7 +62,7 @@ const visiblePageNumbers = computed(() => {
   return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i)
 })
 
-const changePage = (page) => {
+const changePage = (page: number) => {
   currentPage.value = page
 
   emit('updatePage', currentPage.value)

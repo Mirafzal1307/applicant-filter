@@ -1,7 +1,10 @@
 <template>
-  <div class="">
-    <div v-if="props.data.result" class="w-full bg-gray-100 mx-auto text-xl rounded-lg p-10">
-      {{ props?.data.result }}
+   <div v-if="loading" class="mt-5">
+    <CSkeleton />
+  </div>
+  <div v-else class="">
+    <div v-if="data.result" class="w-full bg-gray-100 mx-auto text-xl rounded-lg p-10">
+      {{ data.result }}
     </div>
     <div v-else class="w-full bg-gray-100 mx-auto rounded-lg p-10">
       <h1 class="font-bold text-3xl my-3 text-gray-600">
@@ -70,6 +73,7 @@
 </template>
 
 <script setup lang="ts">
+import CSkeleton from '@/components/skeleton/CSkeleton.vue';
 import { formatDate } from '@/shared/utils/utils'
 
 const props = defineProps({
@@ -78,6 +82,10 @@ const props = defineProps({
     default() {
       return {}
     }
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 </script>

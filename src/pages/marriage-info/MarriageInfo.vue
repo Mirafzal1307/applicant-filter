@@ -1,5 +1,8 @@
 <template>
-  <div class="">
+   <div v-if="loading" class="mt-5">
+    <CSkeleton />
+  </div>
+  <div v-else class="">
     <div v-if="props.data.result" class="w-full bg-gray-100 mx-auto text-xl rounded-lg p-10">
       {{ data.result }}
     </div>
@@ -103,12 +106,18 @@
 </template>
 
 <script setup lang="ts">
+import CSkeleton from '@/components/skeleton/CSkeleton.vue';
+
 const props = defineProps({
   data: {
     type: Object,
     default() {
       return {}
     }
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 </script>

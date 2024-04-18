@@ -1,9 +1,9 @@
 <template>
   <div class="container mt-10">
     <div class="flex justify-between items-center">
-      <div class="flex items-center justify-between gap-4" >
-        <CInput placeholder="search" type="text" class="h-auto" />
-         <CButton> Qidirish</CButton>
+      <div class="flex items-center justify-between gap-4">
+        <CInput v-model="params" placeholder="search" type="text" class="h-auto" />
+        <CButton @click="searchApplicant()"  > Qidirish</CButton>
       </div>
       <RouterLink to="/add-employee">
         <CButton class="h-full"> Nomzod qo'shish</CButton>
@@ -11,7 +11,11 @@
     </div>
 
     <div>
+      <div v-if="loading" class="mt-5">
+        <CSkeleton />
+      </div>
       <CTable
+        v-else
         :titles="titles"
         :data="applicantList"
         :total-items="applicantList.length"
@@ -77,24 +81,34 @@
 <script setup lang="ts">
 import CButton from '@/components/button/CButton.vue'
 import CTable from '@/components/table/CTable.vue'
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import CInput from '@/components/form/input/CInput.vue'
+import CSkeleton from '@/components/skeleton/CSkeleton.vue'
+
+
+const params = ref('')
 
 const userStore = useUserStore()
 
-const { applicantList } = storeToRefs(userStore)
+const { applicantList, loading } = storeToRefs(userStore)
 
 const { getApplicantList } = useUserStore()
 
 onMounted(() => {
-  getApplicantList(1)
+  getApplicantList(1, '')
 })
 
-const updatePage = (page: number) => {
-  getApplicantList(page)
+const searchApplicant = (page = 1 ) => {
+  getApplicantList(page , params.value)
+
+}
+
+
+const updatePage = (page: number ) => {
+  getApplicantList(page , '')
 }
 
 const titles: any = reactive([

@@ -1,57 +1,72 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <div class="">
-      <div v-if="props.data.result" class="w-full bg-gray-100 mx-auto text-xl rounded-lg p-10">
-        {{ props?.data.result }}
+  <div v-if="loading" class="mt-5">
+    <CSkeleton />
+  </div>
+  <div v-else class="">
+    <div
+      v-if="props.data.result !== 'OK'"
+      class="w-full bg-gray-100 mx-auto text-xl rounded-lg p-10"
+    >
+      {{ props?.data.result }}
+      <div v-if="convictionInfo" class="mt-4 " >
+        {{ convictionInfo[0]?.comment }}
       </div>
-      <div v-else class="w-full bg-gray-100 mx-auto  rounded-lg p-10">
-        <h1 class="font-bold text-3xl my-3 text-gray-600">
-          Ishchining doyimiy turar manzili haqidagi ma'lumotlari
-        </h1>
-        <div class="w-full">
-          <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
-            <h2 class="font-semibold text-2xl text-gray-600 uppercase">PNFL:</h2>
-            <h2 class="font-thin text-2xl">{{ props?.data[0]?.employee }}</h2>
-          </div>
-          <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
-            <h2 class="font-semibold text-2xl text-gray-600 uppercase">Davlat:</h2>
-            <h2 class="font-thin text-2xl">{{ props?.data[0]?.permanent_country_name }}</h2>
-          </div>
-          <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
-            <h2 class="font-semibold text-2xl text-gray-600 uppercase">Viloyat:</h2>
-            <h2 class="font-thin text-2xl">{{ props?.data[0]?.permanent_region_name }}</h2>
-          </div>
-          <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
-            <h2 class="font-semibold text-2xl text-gray-600 uppercase">Tuman:</h2>
-            <h2 class="font-thin text-2xl">{{ props?.data[0]?.permanent_district_name }}</h2>
-          </div>
-          <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
-            <h2 class="font-semibold text-2xl text-gray-600 uppercase">Manzil:</h2>
-            <h2 class="font-thin text-2xl text-balance">{{ props?.data[0]?.permanent_address }}</h2>
-          </div>
-        
-          <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
-            <h2 class="font-semibold text-2xl text-gray-600 uppercase">
-              Doyimiy yashash boshlangan sana:
-            </h2>
-            <h2 class="font-thin text-2xl">
-              {{ props?.data[0]?.permanent_registration_date }} 
-            </h2>
-          </div>
-         
-        </div>
+      <div class="mt-6">
+        <CButton @click="getConvictionsInfo(employeeId, data.query_id)">
+          Ma'lumotlarni yangilash</CButton
+        >
       </div>
     </div>
-  </template>
-  
-  <script setup lang="ts">
-  const props = defineProps({
-    data: {
-      type: Object,
-      default() {
-        return {}
-      }
+    <div v-else class="w-full bg-gray-100 mx-auto rounded-lg p-10">
+      <h1 class="font-bold text-3xl my-3 text-gray-600">Nomzodning sud haqidagi ma'lumotlari</h1>
+      <div v-if="convictionInfo">
+        {{ convictionInfo[0]?.comment }}
+      </div>
+      <div class="mt-6">
+        <CButton @click="getConvictionsInfo(employeeId, data.query_id)">
+          Ma'lumotlarni yangilash</CButton
+        >
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import CButton from '@/components/button/CButton.vue'
+import CSkeleton from '@/components/skeleton/CSkeleton.vue'
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const employeeId = router.currentRoute.value.query.id
+
+console.log(employeeId)
+
+const userStore = useUserStore()
+
+const { convictionInfo } = storeToRefs(userStore)
+
+const { getConInfo } = useUserStore()
+
+const props = defineProps({
+  data: {
+    type: Object,
+    default() {
+      return {}
     }
-  })
-  </script>
-  
+  },
+  loading: {
+    type: Boolean,
+    default: false
+  }
+})
+
+console.log(props.data.query_id)
+
+const getConvictionsInfo = async (id: string, queryId: number) => {
+  await getConInfo(id, queryId)
+}
+</script>

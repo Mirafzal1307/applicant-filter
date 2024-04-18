@@ -1,5 +1,8 @@
 <template>
-  <div class="">
+   <div v-if="loading" class="mt-5">
+    <CSkeleton />
+  </div>
+  <div v-else class="">
     <div v-if="props.data.result" class="w-full bg-gray-100 mx-auto text-xl rounded-lg p-10">
       {{ props?.data.result }}
     </div>
@@ -13,7 +16,7 @@
         <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
           <h2 class="font-semibold text-2xl text-gray-600 uppercase">Qarz summasi:</h2>
           <h2 class="font-thin text-2xl">
-            {{ props?.data[0]?.residual_sum }}
+            {{ formatNumber(props?.data[0]?.residual_sum) }} UZS
           </h2>
         </div>
         <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
@@ -26,12 +29,18 @@
 </template>
 
 <script setup lang="ts">
+import CSkeleton from '@/components/skeleton/CSkeleton.vue';
+import { formatNumber} from '@/shared/utils/utils'
 const props = defineProps({
   data: {
     type: Object,
     default() {
       return {}
     }
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 </script>

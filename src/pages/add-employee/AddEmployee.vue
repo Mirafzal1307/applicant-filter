@@ -1,9 +1,9 @@
 <template>
   <div class="container mt-4">
-   <CNavigator title="Bosh sahifa" />
+    <CNavigator title="Bosh sahifa" />
     <form action="" @submit.prevent="addEmployee" class="w-[70%] mx-auto">
       <h1 class="font-bold text-3xl py-8">Ishga qabul qulinuvchining ma'lumotlarini olish</h1>
-      
+
       <CInput
         v-model="employeeInfo.pnfl"
         type="text"
@@ -129,11 +129,18 @@ async function addEmployee() {
     if (data?.status === 200) {
       router.push('/employee-list')
       toast.success('Successfully added', {
-        autoClose: 3000,
+        autoClose: 1000,
+        position: toast.POSITION.TOP_RIGHT
+      } as ToastOptions)
+    } else if (data?.response.status === 400) {
+      toast.error(`${data?.response.data.detail}`, {
+        autoClose: 1000,
         position: toast.POSITION.TOP_RIGHT
       } as ToastOptions)
     }
   } catch (error) {
+    console.log(error.response, 'errorrororororo')
+
     if (error) {
       toast.error('Error has occured', {
         autoClose: 3000,
@@ -142,6 +149,4 @@ async function addEmployee() {
     }
   }
 }
-
-
 </script>
