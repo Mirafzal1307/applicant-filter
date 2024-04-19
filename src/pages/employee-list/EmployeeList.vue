@@ -3,7 +3,7 @@
     <div class="flex justify-between items-center">
       <div class="flex items-center justify-between gap-4">
         <CInput v-model="params" placeholder="search" type="text" class="h-auto" />
-        <CButton @click="searchApplicant()"  > Qidirish</CButton>
+        <CButton @click="searchApplicant()"> Qidirish</CButton>
       </div>
       <RouterLink to="/add-employee">
         <CButton class="h-full"> Nomzod qo'shish</CButton>
@@ -61,6 +61,14 @@
         </template>
         <template #actions="{ data }">
           <div class="text-center">
+            <CButton
+              bg-color="bg-transparent"
+              text-color="text-yellow-500"
+              type="button"
+              class="inline-block font-bold text-2xl hover:text-gray-700 text-center"
+            >
+              <Icon icon="mdi:edit-outline" />
+            </CButton>
             <RouterLink :to="{ name: 'employee-view', query: { id: data?.id } }">
               <CButton
                 bg-color="bg-transparent"
@@ -71,9 +79,28 @@
                 <Icon icon="solar:eye-broken" />
               </CButton>
             </RouterLink>
+            <CButton
+              @click="openModal(data?.id)"
+              bg-color="bg-transparent"
+              text-color="text-red-500"
+              type="button"
+              class="inline-block font-bold text-2xl hover:text-gray-700 text-center"
+            >
+              <Icon icon="mdi:trash-can-outline" />
+            </CButton>
           </div>
         </template>
       </CTable>
+      <CModal v-if="showModal" title="Confirm Action" width="lg" v-on:close="showModal = false">
+        <p class="text-gray-800 text-2xl">
+          Nomzodning ma'lumotlarini chindan o'qchirmoqchimisiz ?
+        </p>
+
+        <div class="text-right mt-4 flex justify-end gap-x-5">
+          <CButton @click="showModal = false"> YO'Q </CButton>
+          <CButton @click="deleteApplicant(applicantID)" bg-color="bg-red-500"> HA </CButton>
+        </div>
+      </CModal>
     </div>
   </div>
 </template>
@@ -87,7 +114,9 @@ import { storeToRefs } from 'pinia'
 import { Icon } from '@iconify/vue/dist/iconify.js'
 import CInput from '@/components/form/input/CInput.vue'
 import CSkeleton from '@/components/skeleton/CSkeleton.vue'
+import CModal from '@/components/modal/CModal.vue'
 
+const showModal = ref(false)
 
 const params = ref('')
 
@@ -95,20 +124,28 @@ const userStore = useUserStore()
 
 const { applicantList, loading } = storeToRefs(userStore)
 
-const { getApplicantList } = useUserStore()
+const { getApplicantList, deleteApplicantInfo } = useUserStore()
 
 onMounted(() => {
   getApplicantList(1, '')
 })
 
-const searchApplicant = (page = 1 ) => {
-  getApplicantList(page , params.value)
-
+const searchApplicant = (page = 1) => {
+  getApplicantList(page, params.value)
 }
 
+const updatePage = (page: number) => {
+  getApplicantList(page, '')
+}
 
-const updatePage = (page: number ) => {
-  getApplicantList(page , '')
+const deleteApplicant = async (id: number) => {
+  deleteApplicantInfo(id)
+  showModal.value = false
+}
+const applicantID = ref(1)
+const openModal = (id: number) => {
+  applicantID.value = id
+  showModal.value = true
 }
 
 const titles: any = reactive([

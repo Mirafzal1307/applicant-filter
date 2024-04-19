@@ -1,7 +1,7 @@
 import type { User, userCredentials, applicantInfo } from '@/shared/types/userTypes';
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { login, employeePost, getEmployeeList, getEmployeeInfoById, putApplicantInfo, getConvictionInfo } from '@/services/user.service';
+import { login, employeePost, getEmployeeList, getEmployeeInfoById, putApplicantInfo, getConvictionInfo, deleteApplicant } from '@/services/user.service';
 
 export const useUserStore = defineStore('user', () => {
 	// state
@@ -103,6 +103,11 @@ export const useUserStore = defineStore('user', () => {
 		}
 	}
 
+	const deleteApplicantInfo = async (id: number) => {
+		await deleteApplicant(id)
+
+	}
+
 	return {
 		isLoggingOut,
 		user,
@@ -115,6 +120,7 @@ export const useUserStore = defineStore('user', () => {
 		getApplicantList,
 		getApplicantInfoById,
 		updateApplicantInfo,
-		getConInfo
+		getConInfo,
+		deleteApplicantInfo
 	}
 })

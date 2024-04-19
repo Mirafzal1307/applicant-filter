@@ -40,3 +40,8 @@ export const getConvictionInfo = async (id: string, queryId: number) => {
   const data = await axios.post(`convictions/v1/get-conviction-by-emp-id?id=${id}&id_query=${queryId}`)
   return data
 }
+
+export const deleteApplicant = async (id:number) => {
+  const data = await axios.delete(`employee/v1/delete-employee?id=${id}`)
+  return data
+}

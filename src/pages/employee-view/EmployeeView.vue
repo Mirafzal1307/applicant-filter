@@ -2,10 +2,35 @@
   <div class="container my-5">
     <div class="flex items-center justify-between">
       <CNavigator title="Bosh sahifa" />
-      <CButton @click="updateApplicantInfos()">Yangilash</CButton>
+      <div class="flex gap-x-5">
+        <CButton @click="showModal = true"> So'rov yuborish</CButton>
+        <CButton @click="showUpdateModal = true">Yangilash</CButton>
+      </div>
     </div>
+
+    <CModal v-if="showModal" title="Confirm Action" width="lg" v-on:close="showModal = false">
+      <p class="text-gray-800 text-2xl">So'rov yuborishga ishonchingiz komilmi? Bu pullik so'rov</p>
+
+      <div class="text-right mt-4 flex justify-end gap-x-5">
+        <CButton @click="showModal = false"> YO'Q </CButton>
+        <CButton @click="getApplicantInfos()" bg-color="bg-red-500"> HA </CButton>
+      </div>
+    </CModal>
+    <CModal
+      v-if="showUpdateModal"
+      title="Confirm Action"
+      width="lg"
+      v-on:close="showUpdateModal = false"
+    >
+      <p class="text-gray-800 text-2xl">So'rov yuborishga ishonchingiz komilmi? Bu pullik so'rov</p>
+
+      <div class="text-right mt-4 flex justify-end gap-x-5">
+        <CButton @click="showUpdateModal = false"> YO'Q </CButton>
+        <CButton @click="updateApplicantInfos()" bg-color="bg-red-500"> HA </CButton>
+      </div>
+    </CModal>
     <div class="flex py-6 gap-8">
-      <div class="w-[40%]">
+      <div class="w-[25%]">
         <ul class="flex flex-col">
           <li class="w-full" v-for="item in pages" :key="item.id">
             <button
@@ -24,8 +49,8 @@
           </li>
         </ul>
       </div>
-      
-      <div class="w-full">
+
+      <div v-if="getData" class="w-full">
         <div
           v-if="applicantInfo && applicantInfo[0]?.api_name === 'date_document_info'"
           class="w-full"
@@ -152,10 +177,15 @@ import WorkHistory from '@/pages/work-history/WorkHistory.vue'
 import MarriageInfo from '@/pages/marriage-info/MarriageInfo.vue'
 import Convictions from '../convictions/Convictions.vue'
 import CButton from '@/components/button/CButton.vue'
+import CModal from '@/components/modal/CModal.vue'
+
+const showModal = ref(false)
+const showUpdateModal = ref(false)
+const getData = ref(false)
 
 const userStore = useUserStore()
 
-const { applicantInfo , loading } = storeToRefs(userStore)
+const { applicantInfo, loading } = storeToRefs(userStore)
 
 const { getApplicantInfoById, updateApplicantInfo } = useUserStore()
 
@@ -163,28 +193,37 @@ const router = useRouter()
 const employeeId = router.currentRoute.value.query.id
 
 const updateURL = ref('')
+const getURL = ref('')
 
-const getUpdateURL = (tabNum = 1) => {
+const fullPathOfApplicant = (tabNum = 1) => {
   const tabName = pages.find((data) => data.id === tabNum)
-
   updateURL.value = `${tabName?.updatePath}` + employeeId
+  getURL.value = `${tabName?.path}` + employeeId
 }
 
-const updateApplicantInfos = () => {
+const updateApplicantInfos = async () => {
   if (updateURL.value !== '') {
-    updateApplicantInfo(updateURL.value)
+    await updateApplicantInfo(updateURL.value)
+    getData.value = true
+    showUpdateModal.value = false
+  }
+}
+const getApplicantInfos = async () => {
+  if (getURL.value !== '') {
+    await getApplicantInfoById(getURL.value)
+    getData.value = true
+    showModal.value = false
   }
 }
 
 onMounted(() => {
-  getApplicantInfoById(`${employeeId}`)
-  getEmployeeInfo()
+  currentTab()
 })
 
 const pages = reactive([
   {
     id: 1,
-    name: "Umumiy ma'alumotlar",
+    name: "Umumiy ma'lumotlar",
     path: 'datedoc/v1/get-datedoc-by-emp-id?id=',
     updatePath: 'datedoc/v1/update-datedoc-by-emp-id?id=',
     border: 'rounded-t',
@@ -249,7 +288,7 @@ const pages = reactive([
     name: 'MIB',
     path: 'mib/v1/get-mib-info-by-emp-id?id=',
     updatePath: 'mib/v1/update-mib-info-by-emp-id?id=',
-    border: 'rounded-r',
+    border: 'rounded-none',
     body: ''
   },
   {
@@ -265,24 +304,16 @@ const pages = reactive([
     name: 'Ish tarixi',
     path: 'citizen/v1/save-citizen-info-by-emp-id?id=',
     updatePath: 'citizen/v1/update-citizen-info-by-emp-id?id=',
-    border: 'rounded-r',
+    border: 'rounded-b',
     body: ''
   }
 ])
 
 const tab = ref(1)
 
-const getEmployeeInfo = (tabNum = 1) => {
-  const tabName = pages.find((data) => data.id === tabNum)
-  const url = `${tabName?.path}` + employeeId
-
-  getApplicantInfoById(url)
-}
-
-const currentTab = (tabNumber: any) => {
+const currentTab = (tabNumber = 1) => {
   tab.value = tabNumber
-  getEmployeeInfo(tabNumber)
-  getUpdateURL(tabNumber)
+  fullPathOfApplicant(tabNumber)
   return
 }
 </script>

@@ -95,7 +95,7 @@
           </h2>
         </div>
         <div class="flex items-center gap-3 mx-2 py-4 border-b border-gray-300">
-          <h2 class="font-semibold text-2xl text-gray-600 uppercase">Qaytlar:</h2>
+          <h2 class="font-semibold text-2xl text-gray-600 uppercase">Qaydlar:</h2>
           <h2 class="font-thin text-2xl">
             {{ data[0]?.notes }}
           </h2>
