@@ -6,8 +6,6 @@ import axios from 'axios'
 
 axios.defaults.baseURL = 'http://172.29.64.73:8000/'
 
-console.log(axios.defaults.baseURL);
-
 axios.defaults.headers.Accept = 'application/json'
 axios.defaults.headers['Content-Type'] = 'application/json'
 axios.defaults.withCredentials = false

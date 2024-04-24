@@ -43,7 +43,6 @@ const router = useRouter()
 
 const employeeId = router.currentRoute.value.query.id
 
-console.log(employeeId)
 
 const userStore = useUserStore()
 
@@ -64,7 +63,7 @@ const props = defineProps({
   }
 })
 
-console.log(props.data.query_id)
+
 
 const getConvictionsInfo = async (id: string, queryId: number) => {
   await getConInfo(id, queryId)

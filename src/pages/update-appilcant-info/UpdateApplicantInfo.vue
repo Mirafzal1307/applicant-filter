@@ -10,6 +10,7 @@
         label="PNFL"
         data-maska="##############"
         data-maska-tokens="0:[0-14]:optional"
+      
       />
       <div class="flex justify-between gap-8 my-3">
         <CInput
@@ -73,6 +74,7 @@
           data-maska="#######"
         />
       </div>
+      <!-- {{ employeeInfoByID }} -->
       <!-- <input v-maska data-maska="#-#"> -->
 
       <CButton class="my-6">Yuborish</CButton>
@@ -87,29 +89,35 @@ import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import { toast, type ToastOptions } from 'vue3-toastify'
 import CNavigator from '@/components/navigator/CNavigator.vue'
+import { storeToRefs } from 'pinia'
 // import { Icon } from '@iconify/vue'
 
 const router = useRouter()
-const { createApplicant } = useUserStore()
+const useStore = useUserStore()
+const { employeeInfoByID } = storeToRefs(useStore)
+const { updateApplicant } = useUserStore()
 
 const employeeInfo = {
-  pnfl: '',
-  firstname: '',
-  lastname: '',
-  middlename: '',
-  passport_seria: '',
-  passport_number: '',
-  birth_date: ''
+  pnfl: employeeInfoByID?.value?.pnfl,
+  firstname: employeeInfoByID?.value?.firstname,
+  lastname: employeeInfoByID?.value?.lastname,
+  middlename: employeeInfoByID?.value?.middlename,
+  passport_seria: employeeInfoByID?.value?.passport_seria,
+  passport_number: employeeInfoByID?.value?.passport_number,
+  birth_date: employeeInfoByID?.value?.birth_date
 }
 
 const options = {
-  preProcess: (val: string) => val.toUpperCase()
+  preProcess: (val: string) => val
 }
 
 options.preProcess(employeeInfo.firstname)
 options.preProcess(employeeInfo.lastname)
 options.preProcess(employeeInfo.middlename)
 options.preProcess(employeeInfo.passport_seria)
+
+
+const employeeId = router.currentRoute.value.query.id
 
 async function addEmployee() {
   const employeeInfos = {
@@ -124,8 +132,8 @@ async function addEmployee() {
 
 
   try {
-    const data: unknown = await createApplicant(employeeInfos)
-  
+    const data: unknown = await updateApplicant(employeeInfos , employeeId)
+
     if (data?.status === 200) {
       router.push('/employee-list')
       toast.success('Successfully added', {
@@ -139,7 +147,6 @@ async function addEmployee() {
       } as ToastOptions)
     }
   } catch (error) {
-
     if (error) {
       toast.error('Error has occured', {
         autoClose: 3000,

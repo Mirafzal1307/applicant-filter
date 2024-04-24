@@ -40,7 +40,7 @@ const props = defineProps<{
 }>()
 
 
-console.log(props.data)
+
 
 const emit = defineEmits(['updatePage'])
 

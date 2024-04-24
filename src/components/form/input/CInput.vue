@@ -56,7 +56,7 @@ const props = defineProps({
     default: ''
   }
 })
-console.log(props.options)
+
 
 // eslint-disable-next-line vue/valid-define-emits
 const emit = defineEmits()

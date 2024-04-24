@@ -114,5 +114,5 @@ const props = defineProps({
     default: false
   }
 })
-console.log('fghjgjjk')
+
 </script>

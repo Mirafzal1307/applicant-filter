@@ -15,24 +15,28 @@ export const employeePost = async (applicantInfo: applicantInfo) => {
   return data
 }
 
+export const employeePut = async (applicantInfo: applicantInfo , id: number) => {
+  const data = await axios.post(`employee/v1/update-employee?id=${id}`, applicantInfo)
+
+  return data
+}
+
 export const getEmployeeList = async (page: number, params: string) => {
-  console.log(page);
 
   const data = await axios.get(`employee/v1/get-all-employees?page=${page}&size=10&params=${params}`)
-  console.log(data);
 
   return data
 }
 
 export const getEmployeeInfoById = async (url: string) => {
   const data = await axios.post(url)
-  console.log(data);
+
   return data
 }
 
 export const putApplicantInfo = async (url: string) => {
   const data = await axios.put(url)
-  console.log(data)
+
   return data
 }
 
@@ -41,7 +45,13 @@ export const getConvictionInfo = async (id: string, queryId: number) => {
   return data
 }
 
-export const deleteApplicant = async (id:number) => {
+export const deleteApplicant = async (id: number) => {
   const data = await axios.delete(`employee/v1/delete-employee?id=${id}`)
+  return data
+}
+
+export const getApplicantInfoById = async (id: number) => {
+  const data = await axios.get(`employee/v1/get-employee-by-id?id=${id}`)
+
   return data
 }

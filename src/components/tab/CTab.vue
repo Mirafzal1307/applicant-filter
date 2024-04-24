@@ -76,7 +76,7 @@ const resolveComponents = (componentName: string) => {
 const tab = ref(currentPage?.id)
 
 const currentTab = (tabNumber: any) => {
-  console.log(tabNumber)
+
   tab.value = tabNumber
 }
 </script>

@@ -65,7 +65,7 @@ const maxWidth = computed(() => {
   }
 })
 
-console.log(maxWidth.value);
+
 
 
 const onEscape = (e: KeyboardEvent) => {

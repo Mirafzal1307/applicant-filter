@@ -61,16 +61,21 @@
         </template>
         <template #actions="{ data }">
           <div class="text-center">
-            <CButton
-              bg-color="bg-transparent"
-              text-color="text-yellow-500"
-              type="button"
-              class="inline-block font-bold text-2xl hover:text-gray-700 text-center"
-            >
-              <Icon icon="mdi:edit-outline" />
-            </CButton>
+            <RouterLink :to="{ name: 'update-applicant-info', query: { id: data?.id } }">
+              <CButton
+              @click="getEmployeeById(data?.id)"
+                bg-color="bg-transparent"
+                text-color="text-yellow-500"
+                type="button"
+                class="inline-block font-bold text-2xl hover:text-gray-700 text-center"
+              >
+                <Icon icon="mdi:edit-outline" />
+              </CButton>
+            </RouterLink>
+
             <RouterLink :to="{ name: 'employee-view', query: { id: data?.id } }">
               <CButton
+                
                 bg-color="bg-transparent"
                 text-color="text-primary"
                 type="button"
@@ -78,7 +83,7 @@
               >
                 <Icon icon="solar:eye-broken" />
               </CButton>
-            </RouterLink>
+            </RouterLink>l
             <CButton
               @click="openModal(data?.id)"
               bg-color="bg-transparent"
@@ -92,9 +97,7 @@
         </template>
       </CTable>
       <CModal v-if="showModal" title="Confirm Action" width="lg" v-on:close="showModal = false">
-        <p class="text-gray-800 text-2xl">
-          Nomzodning ma'lumotlarini chindan o'qchirmoqchimisiz ?
-        </p>
+        <p class="text-gray-800 text-2xl">Nomzodning ma'lumotlarini chindan o'qchirmoqchimisiz ?</p>
 
         <div class="text-right mt-4 flex justify-end gap-x-5">
           <CButton @click="showModal = false"> YO'Q </CButton>
@@ -124,7 +127,7 @@ const userStore = useUserStore()
 
 const { applicantList, loading } = storeToRefs(userStore)
 
-const { getApplicantList, deleteApplicantInfo } = useUserStore()
+const { getApplicantList, deleteApplicantInfo, getEmployeeById } = useUserStore()
 
 onMounted(() => {
   getApplicantList(1, '')
@@ -138,8 +141,11 @@ const updatePage = (page: number) => {
   getApplicantList(page, '')
 }
 
+
+
 const deleteApplicant = async (id: number) => {
-  deleteApplicantInfo(id)
+  await deleteApplicantInfo(id)
+  await getApplicantList(1, '')
   showModal.value = false
 }
 const applicantID = ref(1)

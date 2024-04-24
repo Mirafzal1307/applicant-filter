@@ -29,6 +29,12 @@ const router = createRouter({
       component: () => import('@/pages/add-employee/AddEmployee.vue')
     },
     {
+      path: '/update-applicant-info',
+      name: 'update-applicant-info',
+      meta: { layout: 'default' },
+      component: () => import('@/pages/update-appilcant-info/UpdateApplicantInfo.vue')
+    },
+    {
       path: '/employee-view',
       name: 'employee-view',
       meta: { layout: 'default' },
@@ -45,7 +51,6 @@ router.beforeEach((to, from, next) => {
   }
 
   if (to.name === 'login' && loggedIn) {
-    console.log('logged in')
     return next({ name: 'employee-list' })
   }
 
